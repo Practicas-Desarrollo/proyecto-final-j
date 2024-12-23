@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: concell_system_postgres_db
+    environment:
+      POSTGRES_DB: ${STAGE_DB_NAME}
+      POSTGRES_USER: ${STAGE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${STAGE_DB_PASSWORD}
+      TZ: "UTC-4"
+    ports:
+      - 3434:3434
+    command: -p 3434
+    profiles:
+      - stage
+    env_file:
+      - .env
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: concell_system_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${STAGE_PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${STAGE_PGADMIN_PASSWORD}
+      PGADMIN_LISTEN_PORT: ${STAGE_PGADMIN_PORT}
+    ports:
+      - 4444:4444
+    depends_on:
+      - postgres
+    profiles:
+      - stage
+    env_file:
+      - .env
