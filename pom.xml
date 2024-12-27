@@ -22,18 +22,21 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<!-- JPA -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-data-jpa</artifactId>
 		    <version>2.7.1</version>
 		</dependency>
+
 		<!-- JDBC -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-jdbc</artifactId>
 		    <version>2.7.1</version>
 		</dependency>
+
 		<!-- POSTGRESQL -->
 		<dependency>
 		    <groupId>org.postgresql</groupId>
@@ -45,9 +48,8 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		
-		
+
+		<!-- SECURITY -->
 		<!-- 
 			<dependency>
 		    <groupId>org.springframework.boot</groupId>
@@ -61,9 +63,13 @@
 		    <version>0.9.1</version>
 		</dependency>
 		-->
-		<!-- SECURITY -->
-	
 
+		<!-- Swagger UI -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.7.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
