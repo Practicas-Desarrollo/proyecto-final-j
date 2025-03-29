@@ -13,8 +13,10 @@ import java.util.List;
 
 @Service
 public class ProductoServicio {
+
   private final ProductoRepositorio productoRepositorio;
   private final CategoriaServicio categoriaServicio;
+  private static final int STOCK_BAJO = 10;
 
   public ProductoServicio(ProductoRepositorio productoRepositorio,
                           CategoriaServicio categoriaServicio) {
@@ -27,8 +29,7 @@ public class ProductoServicio {
   }
 
   public Producto obtenerProductoPorId(Integer idProducto) {
-    return productoRepositorio
-            .findById(idProducto)
+    return productoRepositorio.findById(idProducto)
             .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
   }
 
@@ -71,7 +72,8 @@ public class ProductoServicio {
     );
   }
 
-  public ProductoResponse actualizarProducto(Integer idProducto, ProductoRequest productoRequest) {
+  public ProductoResponse actualizarProducto(
+          Integer idProducto, ProductoRequest productoRequest) {
     Producto producto = productoRepositorio.findById(idProducto)
             .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
@@ -102,8 +104,7 @@ public class ProductoServicio {
   }
 
   public ProductoResponse actualizarEstadoProducto(int idProducto) {
-    Producto producto = productoRepositorio.
-            findById(idProducto)
+    Producto producto = productoRepositorio.findById(idProducto)
             .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
     Estado nuevoEstado = (producto.getEstado() == Estado.ACTIVO) ? Estado.INACTIVO : Estado.ACTIVO;
@@ -127,5 +128,11 @@ public class ProductoServicio {
     }
 
     productoRepositorio.deleteById(idProducto);
+  }
+
+  public void verificarStockBajo(Producto producto) {
+    if (producto.getCantidad() < STOCK_BAJO) {
+      throw new RuntimeException("Stock bajo para el producto: " + producto.getNombre());
+    }
   }
 }

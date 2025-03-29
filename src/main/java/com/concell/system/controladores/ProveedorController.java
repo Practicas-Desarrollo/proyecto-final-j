@@ -1,6 +1,7 @@
 package com.concell.system.controladores;
 
-import com.concell.system.modelos.Proveedor;
+import com.concell.system.mapeadores.requests.ProveedorRequest;
+import com.concell.system.mapeadores.responses.ProveedorResponse;
 import com.concell.system.servicios.ProveedorServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,45 +20,64 @@ public class ProveedorController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Proveedor>> listarProveedores() {
-    List<Proveedor> proveedores = proveedorServicio.listarProveedores();
-    return ResponseEntity.ok(proveedores);
+  public ResponseEntity<List<ProveedorResponse>> obtenerProveedores() {
+    List<ProveedorResponse> proveedores = proveedorServicio
+            .obtenerProveedores()
+            .stream()
+            .map(proveedor -> new ProveedorResponse(
+                    proveedor.getIdProveedor(),
+                    proveedor.getNombre(),
+                    proveedor.getApellidoPaterno(),
+                    proveedor.getApellidoMaterno(),
+                    proveedor.getContacto(),
+                    proveedor.getTipoProducto(),
+                    proveedor.getNit(),
+                    proveedor.getEstado())
+            )
+            .toList();
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(proveedores);
+  }
+
+  @GetMapping("/{idProveedor}")
+  public ResponseEntity<ProveedorResponse> obtenerProveedorPorId(
+          @PathVariable("idProveedor") Integer idProveedor) {
+    ProveedorResponse response = proveedorServicio.obtenerProveedorPorId(idProveedor);
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(response);
   }
 
   @PostMapping
-  public ResponseEntity<Proveedor> crearProveedor(@RequestBody Proveedor proveedor) {
-    Proveedor nuevoProveedor = proveedorServicio.crearProveedor(proveedor);
-    return ResponseEntity.status(HttpStatus.CREATED).body(nuevoProveedor);
-  }
+  public ResponseEntity<ProveedorResponse> crearProveedor(
+          @RequestBody ProveedorRequest request) {
+    ProveedorResponse response = proveedorServicio.crearProveedor(request);
 
-  @GetMapping("/activos")
-  public ResponseEntity<List<Proveedor>> obtenerProveedoresActivos() {
-    List<Proveedor> proveedoresActivos = proveedorServicio.obtenerProveedoresActivos();
-    return ResponseEntity.ok(proveedoresActivos);
-  }
-
-  @GetMapping("/tipo/{tipoProducto}")
-  public ResponseEntity<List<Proveedor>> obtenerProveedoresPorTipoProducto(
-          @PathVariable String tipoProducto) {
-    List<Proveedor> proveedores = proveedorServicio
-            .obtenerProveedoresPorTipoProducto(tipoProducto);
-
-    return ResponseEntity.ok(proveedores);
+    return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(response);
   }
 
   @PutMapping("/{idProveedor}")
-  public ResponseEntity<Proveedor> actualizarProveedor(
-          @PathVariable Integer idProveedor,
-          @RequestBody Proveedor proveedor) {
-    proveedor.setIdProveedor(idProveedor);
-    Proveedor proveedorActualizado = proveedorServicio.actualizarProveedor(proveedor);
+  public ResponseEntity<ProveedorResponse> actualizarProveedor(
+          @PathVariable("idProveedor") Integer idProveedor,
+          @RequestBody ProveedorRequest request) {
+    ProveedorResponse response = proveedorServicio
+            .actualizarProveedor(idProveedor, request);
 
-    return ResponseEntity.ok(proveedorActualizado);
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(response);
   }
 
   @DeleteMapping("/{idProveedor}")
-  public ResponseEntity<Void> eliminarProveedor(@PathVariable Integer idProveedor) {
+  public ResponseEntity<Void> eliminarProveedor(
+          @PathVariable("idProveedor") Integer idProveedor) {
     proveedorServicio.eliminarProveedor(idProveedor);
+
     return ResponseEntity.noContent().build();
   }
 }

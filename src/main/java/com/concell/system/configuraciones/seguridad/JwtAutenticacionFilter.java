@@ -1,6 +1,6 @@
 package com.concell.system.configuraciones.seguridad;
 
-import com.concell.system.servicios.JwtService;
+import com.concell.system.servicios.JwtServicio;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Service
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAutenticacionFilter extends OncePerRequestFilter {
 
-  private final JwtService jwtService;
+  private final JwtServicio jwtService;
   private final UserDetailsService userDetailsService;
 
-  public JwtAuthenticationFilter(JwtService jwtService,
-                                 UserDetailsService userDetailsService) {
-    this.jwtService = jwtService;
+  public JwtAutenticacionFilter(JwtServicio jwtServicio,
+                                UserDetailsService userDetailsService) {
+    this.jwtService = jwtServicio;
     this.userDetailsService = userDetailsService;
   }
 

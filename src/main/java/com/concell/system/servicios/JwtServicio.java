@@ -1,5 +1,6 @@
 package com.concell.system.servicios;
 
+import com.concell.system.modelos.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,11 +13,12 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtServicio {
 
   @Value("${spring.application.security.jwt.secret-key}")
   private String secretKey;
@@ -24,9 +26,12 @@ public class JwtService {
   @Value("${spring.application.security.jwt.expiration}")
   private long tiempoExpiracion;
 
-  public String crearToken(UserDetails userDetails) {
+  public String crearToken(Usuario usuario) {
     Map<String, Object> extraClaims = new HashMap<>();
-    return generarToken(extraClaims, userDetails);
+//    extraClaims.put("rol", usuario.getRol().getNombre());
+//    extraClaims.put("permisos", usuario.getRol().getPermisos());
+
+    return generarToken(extraClaims, usuario);
   }
 
   public String getEmailFromToken(String token) {

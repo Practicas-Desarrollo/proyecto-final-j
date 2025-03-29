@@ -9,5 +9,4 @@ public record CategoriaResponse(
         String nombre,
         Estado estado,
         List<ProductoResponse> productos
-) {
-}
+) {}

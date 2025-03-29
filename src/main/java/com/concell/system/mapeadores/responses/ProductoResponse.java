@@ -12,5 +12,4 @@ public record ProductoResponse(
         Integer cantidad,
         Estado estado,
         Integer idCategoria
-) {
-}
+) {}

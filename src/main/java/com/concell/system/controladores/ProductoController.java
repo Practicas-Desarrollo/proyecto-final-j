@@ -42,9 +42,9 @@ public class ProductoController {
             .body(productos);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{idProducto}")
   public ResponseEntity<ProductoResponse> obtenerProductoPorId(
-          @PathVariable("id") Integer idProducto) {
+          @PathVariable("idProducto") Integer idProducto) {
     Producto producto = productoServicio.obtenerProductoPorId(idProducto);
 
     ProductoResponse response = new ProductoResponse(

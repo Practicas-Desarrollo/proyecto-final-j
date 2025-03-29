@@ -7,11 +7,12 @@ import com.concell.system.modelos.Proveedor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProveedorRepositorio extends JpaRepository<Proveedor, Integer> {
 
-  List<Proveedor> findByEstado(Estado estado);
+  Optional<Proveedor> findByNombre(String nombre);
 
-  List<Proveedor> findByTipoProducto(String tipoProducto);
+  List<Proveedor> findByEstado(Estado estado);
 }

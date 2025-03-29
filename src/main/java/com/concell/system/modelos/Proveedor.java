@@ -1,14 +1,20 @@
 package com.concell.system.modelos;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "proveedor")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Proveedor {
 
 	@Id
@@ -25,6 +31,9 @@ public class Proveedor {
 	@Column(name = "apellido_materno")
 	private String apellidoMaterno;
 
+	@Column(name = "nit")
+	private String nit;
+
 	@Column(name = "contacto")
 	private String contacto;
 
@@ -35,6 +44,10 @@ public class Proveedor {
 	@Column(name = "estado")
 	private Estado estado;
 
-	@OneToOne(mappedBy = "proveedor")
-	private Compra compra;
+	@OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Compra> compras = new ArrayList<>();
+
+	public String obtenerNombreCompleto() {
+		return this.nombre + " " + this.apellidoPaterno + " " + this.apellidoMaterno;
+	}
 }

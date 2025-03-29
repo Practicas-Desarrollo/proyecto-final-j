@@ -8,11 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductoRepositorio extends JpaRepository <Producto, Integer> {
 
   List<Producto> findByEstado(Estado estado);
+
+  Optional<Producto> findByNombre(String nombre);
 
   List<Producto> findByNombreContainingIgnoreCase(String nombre);
 
