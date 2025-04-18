@@ -1,22 +1,10 @@
 package com.concell.system.modelos;
 
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "detalle_usuario")
-@Builder
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class DetalleUsuario {
 
   @Id
@@ -46,12 +34,85 @@ public class DetalleUsuario {
   @Column(name = "fecha_nacimiento")
   private LocalDate fechaNacimiento;
 
-  @CreatedDate
-  @Column(nullable = false, updatable = false)
-  private LocalDateTime fechaCreacion;
+  public DetalleUsuario() {
+  }
 
-  @LastModifiedDate
-  private LocalDateTime fechaModificacion;
+  public DetalleUsuario(Integer idDetalleUsuario, Usuario usuario, String foto,
+                        String nombre, String nombreUsuario, String apellidoPaterno,
+                        String apellidoMaterno, LocalDate fechaNacimiento) {
+    this.idDetalleUsuario = idDetalleUsuario;
+    this.usuario = usuario;
+    this.foto = foto;
+    this.nombre = nombre;
+    this.nombreUsuario = nombreUsuario;
+    this.apellidoPaterno = apellidoPaterno;
+    this.apellidoMaterno = apellidoMaterno;
+    this.fechaNacimiento = fechaNacimiento;
+  }
+
+  public Integer getIdDetalleUsuario() {
+    return idDetalleUsuario;
+  }
+
+  public void setIdDetalleUsuario(Integer idDetalleUsuario) {
+    this.idDetalleUsuario = idDetalleUsuario;
+  }
+
+  public Usuario getUsuario() {
+    return usuario;
+  }
+
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
+  }
+
+  public String getFoto() {
+    return foto;
+  }
+
+  public void setFoto(String foto) {
+    this.foto = foto;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public String getNombreUsuario() {
+    return nombreUsuario;
+  }
+
+  public void setNombreUsuario(String nombreUsuario) {
+    this.nombreUsuario = nombreUsuario;
+  }
+
+  public String getApellidoPaterno() {
+    return apellidoPaterno;
+  }
+
+  public void setApellidoPaterno(String apellidoPaterno) {
+    this.apellidoPaterno = apellidoPaterno;
+  }
+
+  public String getApellidoMaterno() {
+    return apellidoMaterno;
+  }
+
+  public void setApellidoMaterno(String apellidoMaterno) {
+    this.apellidoMaterno = apellidoMaterno;
+  }
+
+  public LocalDate getFechaNacimiento() {
+    return fechaNacimiento;
+  }
+
+  public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
+  }
 
   public String obtenerNombreCompleto() {
     return this.nombre + " " + this.apellidoPaterno + " " + this.apellidoMaterno;

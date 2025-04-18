@@ -15,6 +15,8 @@ public record VentaResponse(
         BigDecimal total,
         Estado estado,
         Integer idUsuario,
+        String nombreUsuario,
         Integer idCliente,
+        String nombreCliente,
         List<ProductoVendidoResponse> productosVendidos
 ) {}

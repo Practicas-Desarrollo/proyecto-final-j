@@ -1,15 +1,10 @@
 package com.concell.system.modelos;
 
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,12 +16,6 @@ import java.util.List;
 								@UniqueConstraint(columnNames = { "email" })
 				}
 			)
-@Builder
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class Usuario implements UserDetails {
 
 	@Id
@@ -57,13 +46,86 @@ public class Usuario implements UserDetails {
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Venta> ventas = new ArrayList<>();
 
-	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime fechaCreacion;
+	public Usuario() {
+	}
 
-	@LastModifiedDate
-	@Column(insertable = false)
-	private LocalDateTime fechaModificacion;
+	public Usuario(Integer idUsuario, String email, String password,
+	               Estado estado, Rol rol, DetalleUsuario detalleUsuario,
+	               List<Compra> compras, List<Venta> ventas) {
+		this.idUsuario = idUsuario;
+		this.email = email;
+		this.password = password;
+		this.estado = estado;
+		this.rol = rol;
+		this.detalleUsuario = detalleUsuario;
+		this.compras = compras;
+		this.ventas = ventas;
+	}
+
+	public Integer getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Integer idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
+	}
+
+	public DetalleUsuario getDetalleUsuario() {
+		return detalleUsuario;
+	}
+
+	public void setDetalleUsuario(DetalleUsuario detalleUsuario) {
+		this.detalleUsuario = detalleUsuario;
+	}
+
+	public List<Compra> getCompras() {
+		return compras;
+	}
+
+	public void setCompras(List<Compra> compras) {
+		this.compras = compras;
+	}
+
+	public List<Venta> getVentas() {
+		return ventas;
+	}
+
+	public void setVentas(List<Venta> ventas) {
+		this.ventas = ventas;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -92,6 +154,6 @@ public class Usuario implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return estado == Estado.ACTIVO;
 	}
 }

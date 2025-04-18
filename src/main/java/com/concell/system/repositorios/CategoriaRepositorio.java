@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CategoriaRepositorio extends JpaRepository<Categoria, Integer> {
 
-  List<Categoria> findByEstado(Estado estado);
-
   List<Categoria> findByNombreContainingIgnoreCase(String nombre);
+
+  List<Categoria> findByEstado(Estado estado);
 }

@@ -33,8 +33,8 @@ public class ClienteController {
                     cliente.getDireccion(),
                     cliente.getTelefono(),
                     cliente.getEmail()
-            ))
-            .toList();
+            )).toList();
+
     return ResponseEntity.ok(clientes);
   }
 
@@ -55,6 +55,26 @@ public class ClienteController {
     );
 
     return ResponseEntity.ok(clienteResponse);
+  }
+
+  @GetMapping("/buscar")
+  public ResponseEntity<List<ClienteResponse>> buscarClientesPorNombre(
+          @RequestParam String nombre) {
+    List<ClienteResponse> clientes = clienteServicio
+            .buscarClientesPorNombre(nombre)
+            .stream()
+            .map(cliente -> new ClienteResponse(
+                    cliente.getIdCliente(),
+                    cliente.getNit(),
+                    cliente.getNombre(),
+                    cliente.getApellidoPaterno(),
+                    cliente.getApellidoMaterno(),
+                    cliente.getDireccion(),
+                    cliente.getTelefono(),
+                    cliente.getEmail()
+            )).toList();
+
+    return ResponseEntity.ok(clientes);
   }
 
   @PostMapping

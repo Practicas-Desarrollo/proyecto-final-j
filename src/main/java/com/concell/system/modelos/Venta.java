@@ -1,10 +1,5 @@
 package com.concell.system.modelos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 
 import java.math.BigDecimal;
@@ -14,10 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "venta")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Venta {
 
 	@Id
@@ -51,7 +42,96 @@ public class Venta {
 	private Cliente cliente;
 
 	@OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ProductoVendido> productosVendidos = new ArrayList<>();
+	private List<DetalleVenta> productosVendidos = new ArrayList<>();
+
+	public Venta() {
+	}
+
+	public Venta(Integer idVenta, LocalDate fecha, String descripcionGarantia,
+	             TipoPago tipoPago, BigDecimal total, Estado estado,
+	             Usuario usuario, Cliente cliente, List<DetalleVenta> productosVendidos) {
+		this.idVenta = idVenta;
+		this.fecha = fecha;
+		this.descripcionGarantia = descripcionGarantia;
+		this.tipoPago = tipoPago;
+		this.total = total;
+		this.estado = estado;
+		this.usuario = usuario;
+		this.cliente = cliente;
+		this.productosVendidos = productosVendidos;
+	}
+
+	public Integer getIdVenta() {
+		return idVenta;
+	}
+
+	public void setIdVenta(Integer idVenta) {
+		this.idVenta = idVenta;
+	}
+
+	public LocalDate getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getDescripcionGarantia() {
+		return descripcionGarantia;
+	}
+
+	public void setDescripcionGarantia(String descripcionGarantia) {
+		this.descripcionGarantia = descripcionGarantia;
+	}
+
+	public TipoPago getTipoPago() {
+		return tipoPago;
+	}
+
+	public void setTipoPago(TipoPago tipoPago) {
+		this.tipoPago = tipoPago;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public List<DetalleVenta> getProductosVendidos() {
+		return productosVendidos;
+	}
+
+	public void setProductosVendidos(List<DetalleVenta> productosVendidos) {
+		this.productosVendidos = productosVendidos;
+	}
 
 	@PrePersist
 	@PreUpdate

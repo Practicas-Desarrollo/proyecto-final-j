@@ -1,10 +1,6 @@
 package com.concell.system.modelos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,10 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "producto")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Producto {
 
 	@Id
@@ -46,8 +38,98 @@ public class Producto {
 	private Categoria categoria;
 
 	@OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ProductoComprado> productosComprados = new ArrayList<>();
+	private List<DetalleCompra> productosComprados = new ArrayList<>();
 
 	@OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ProductoVendido> productosVendidos = new ArrayList<>();
+	private List<DetalleVenta> productosVendidos = new ArrayList<>();
+
+	public Producto() {
+	}
+
+	public Producto(Integer idProducto, String nombre, String descripcion,
+	                BigDecimal precio, Integer cantidad, Estado estado,
+	                Categoria categoria, List<DetalleCompra> productosComprados,
+	                List<DetalleVenta> productosVendidos) {
+		this.idProducto = idProducto;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.precio = precio;
+		this.cantidad = cantidad;
+		this.estado = estado;
+		this.categoria = categoria;
+		this.productosComprados = productosComprados;
+		this.productosVendidos = productosVendidos;
+	}
+
+	public Integer getIdProducto() {
+		return idProducto;
+	}
+
+	public void setIdProducto(Integer idProducto) {
+		this.idProducto = idProducto;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public BigDecimal getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
+	}
+
+	public Integer getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(Integer cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public List<DetalleCompra> getProductosComprados() {
+		return productosComprados;
+	}
+
+	public void setProductosComprados(List<DetalleCompra> productosComprados) {
+		this.productosComprados = productosComprados;
+	}
+
+	public List<DetalleVenta> getProductosVendidos() {
+		return productosVendidos;
+	}
+
+	public void setProductosVendidos(List<DetalleVenta> productosVendidos) {
+		this.productosVendidos = productosVendidos;
+	}
 }

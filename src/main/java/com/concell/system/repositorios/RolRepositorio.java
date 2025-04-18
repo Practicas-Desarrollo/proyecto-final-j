@@ -7,14 +7,13 @@ import com.concell.system.modelos.Rol;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface RolRepositorio extends JpaRepository<Rol, Integer> {
 
-  Optional<Rol> findByNombre(String nombre);
-
-  List<Rol> findByEstado(Estado estado);
+  List<Rol> findByNombreContainingIgnoreCase(String nombre);
 
   boolean existsByNombre(String nombre);
+
+  List<Rol> findByEstado(Estado estado);
 }

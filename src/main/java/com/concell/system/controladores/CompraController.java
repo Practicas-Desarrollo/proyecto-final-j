@@ -36,8 +36,8 @@ public class CompraController {
                     compra.getDescripcion(),
                     compra.getCostoTotal(),
                     compra.getEstado(),
-                    compra.getProveedor().getIdProveedor(),
-                    compra.getUsuario().getIdUsuario(),
+                    compra.getProveedor().getNombre(),
+                    compra.getUsuario().getEmail(),
                     compra.getProductosComprados()
                             .stream()
                             .map(pc -> new ProductoCompradoResponse(
@@ -78,8 +78,8 @@ public class CompraController {
                     compra.getDescripcion(),
                     compra.getCostoTotal(),
                     compra.getEstado(),
-                    compra.getProveedor().getIdProveedor(),
-                    compra.getUsuario().getIdUsuario(),
+                    compra.getProveedor().getNombre(),
+                    compra.getUsuario().getEmail(),
                     compra.getProductosComprados()
                             .stream()
                             .map(pc -> new ProductoCompradoResponse(
@@ -113,8 +113,8 @@ public class CompraController {
                     compra.getDescripcion(),
                     compra.getCostoTotal(),
                     compra.getEstado(),
-                    compra.getProveedor().getIdProveedor(),
-                    compra.getUsuario().getIdUsuario(),
+                    compra.getProveedor().getNombre(),
+                    compra.getUsuario().getEmail(),
                     compra.getProductosComprados()
                             .stream()
                             .map(pc -> new ProductoCompradoResponse(

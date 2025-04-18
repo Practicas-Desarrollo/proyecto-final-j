@@ -26,6 +26,10 @@ public class ClienteServicio {
             .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
   }
 
+  public List<Cliente> buscarClientesPorNombre(String nombre) {
+    return clienteRepositorio.findByNombreContainingIgnoreCase(nombre);
+  }
+
   public ClienteResponse crearCliente(ClienteRequest request) {
     Cliente cliente = new Cliente();
     cliente.setNit(request.nit());

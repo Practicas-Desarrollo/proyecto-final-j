@@ -1,10 +1,5 @@
 package com.concell.system.modelos;
 
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,12 +7,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "rol")
-@Builder
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class Rol {
 
 	@Id
@@ -35,11 +24,46 @@ public class Rol {
 	@OneToMany(mappedBy = "rol")
 	private List<Usuario> usuarios = new ArrayList<>();
 
-	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime fechaCreacion;
+	public Rol() {
+	}
 
-	@LastModifiedDate
-	@Column(insertable = false)
-	private LocalDateTime fechaModificacion;
+	public Rol(Integer idRol, String nombre,
+	           Estado estado, List<Usuario> usuarios) {
+		this.idRol = idRol;
+		this.nombre = nombre;
+		this.estado = estado;
+		this.usuarios = usuarios;
+	}
+
+	public Integer getIdRol() {
+		return idRol;
+	}
+
+	public void setIdRol(Integer idRol) {
+		this.idRol = idRol;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
 }

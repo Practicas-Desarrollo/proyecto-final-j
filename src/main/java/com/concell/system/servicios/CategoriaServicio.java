@@ -14,6 +14,7 @@ import java.util.List;
 
 @Service
 public class CategoriaServicio {
+
   private final CategoriaRepositorio categoriaRepositorio;
 
   public CategoriaServicio(CategoriaRepositorio categoriaRepositorio) {

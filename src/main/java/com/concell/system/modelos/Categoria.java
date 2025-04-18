@@ -1,20 +1,11 @@
 package com.concell.system.modelos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "categoria")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Categoria {
 
   @Id
@@ -31,4 +22,46 @@ public class Categoria {
 
   @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Producto> productos = new ArrayList<>();
+
+  public Categoria() {
+  }
+
+  public Categoria(Integer idCategoria, String nombre, Estado estado, List<Producto> productos) {
+    this.idCategoria = idCategoria;
+    this.nombre = nombre;
+    this.estado = estado;
+    this.productos = productos;
+  }
+
+  public Integer getIdCategoria() {
+    return this.idCategoria;
+  }
+
+  public void setIdCategoria(Integer idCategoria) {
+    this.idCategoria = idCategoria;
+  }
+
+  public String getNombre() {
+    return this.nombre;
+  }
+
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public Estado getEstado() {
+    return this.estado;
+  }
+
+  public void setEstado(Estado estado) {
+    this.estado = estado;
+  }
+
+  public List<Producto> getProductos() {
+    return this.productos;
+  }
+
+  public void setProductos(List<Producto> productos) {
+    this.productos = productos;
+  }
 }

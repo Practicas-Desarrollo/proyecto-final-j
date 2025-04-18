@@ -7,8 +7,6 @@ import com.concell.system.mapeadores.responses.ProductoCompradoResponse;
 import com.concell.system.modelos.*;
 import com.concell.system.repositorios.*;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -49,8 +47,8 @@ public class CompraServicio {
             compra.getDescripcion(),
             compra.getCostoTotal(),
             compra.getEstado(),
-            compra.getProveedor().getIdProveedor(),
-            compra.getUsuario().getIdUsuario(),
+            compra.getProveedor().getNombre(),
+            compra.getUsuario().getEmail(),
             compra.getProductosComprados()
                     .stream()
                     .map(pc -> new ProductoCompradoResponse(
@@ -90,9 +88,9 @@ public class CompraServicio {
       Producto producto = productoRepositorio.findById(pcRequest.idProducto())
               .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + pcRequest.idProducto()));
 
-      ProductoCompradoId id = new ProductoCompradoId(compra.getIdCompra(), producto.getIdProducto());
+      DetalleCompraId id = new DetalleCompraId(compra.getIdCompra(), producto.getIdProducto());
 
-      ProductoComprado productoComprado = new ProductoComprado();
+      DetalleCompra productoComprado = new DetalleCompra();
       productoComprado.setId(id);
       productoComprado.setCompra(compra);
       productoComprado.setProducto(producto);
@@ -111,8 +109,8 @@ public class CompraServicio {
             savedCompra.getDescripcion(),
             savedCompra.getCostoTotal(),
             savedCompra.getEstado(),
-            savedCompra.getProveedor().getIdProveedor(),
-            savedCompra.getUsuario().getIdUsuario(),
+            savedCompra.getProveedor().getNombre(),
+            savedCompra.getUsuario().getEmail(),
             savedCompra.getProductosComprados()
                     .stream()
                     .map(pc -> new ProductoCompradoResponse(
@@ -143,16 +141,16 @@ public class CompraServicio {
       Producto producto = productoRepositorio.findById(pcRequest.idProducto())
               .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + pcRequest.idProducto()));
 
-      ProductoCompradoId id = new ProductoCompradoId(compra.getIdCompra(), producto.getIdProducto());
+      DetalleCompraId id = new DetalleCompraId(compra.getIdCompra(), producto.getIdProducto());
 
-      ProductoComprado productoComprado = new ProductoComprado();
-      productoComprado.setId(id);
-      productoComprado.setCompra(compra);
-      productoComprado.setProducto(producto);
-      productoComprado.setCantidad(pcRequest.cantidad());
-      productoComprado.setPrecioUnitario(pcRequest.precioUnitario());
+      DetalleCompra detalleCompra = new DetalleCompra();
+      detalleCompra.setId(id);
+      detalleCompra.setCompra(compra);
+      detalleCompra.setProducto(producto);
+      detalleCompra.setCantidad(pcRequest.cantidad());
+      detalleCompra.setPrecioUnitario(pcRequest.precioUnitario());
 
-      compra.getProductosComprados().add(productoComprado);
+      compra.getProductosComprados().add(detalleCompra);
     }
 
     Compra updatedCompra = compraRepositorio.save(compra);
@@ -164,8 +162,8 @@ public class CompraServicio {
             updatedCompra.getDescripcion(),
             updatedCompra.getCostoTotal(),
             updatedCompra.getEstado(),
-            updatedCompra.getProveedor().getIdProveedor(),
-            updatedCompra.getUsuario().getIdUsuario(),
+            updatedCompra.getProveedor().getNombre(),
+            updatedCompra.getUsuario().getEmail(),
             updatedCompra.getProductosComprados()
                     .stream()
                     .map(pc -> new ProductoCompradoResponse(

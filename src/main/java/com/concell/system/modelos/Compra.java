@@ -1,10 +1,5 @@
 package com.concell.system.modelos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 
 import java.math.BigDecimal;
@@ -14,10 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "compra")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Compra {
 
 	@Id
@@ -53,7 +44,106 @@ public class Compra {
 	private Usuario usuario;
 
 	@OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ProductoComprado> productosComprados = new ArrayList<>();
+	private List<DetalleCompra> productosComprados = new ArrayList<>();
+
+	public Compra() {
+	}
+
+	public Compra(Integer idCompra, LocalDate fecha, String tipoCompra,
+	              String nombreCompra, String descripcion, BigDecimal costoTotal,
+	              Estado estado, Proveedor proveedor, Usuario usuario,
+	              List<DetalleCompra> productosComprados) {
+		this.idCompra = idCompra;
+		this.fecha = fecha;
+		this.tipoCompra = tipoCompra;
+		this.nombreCompra = nombreCompra;
+		this.descripcion = descripcion;
+		this.costoTotal = costoTotal;
+		this.estado = estado;
+		this.proveedor = proveedor;
+		this.usuario = usuario;
+		this.productosComprados = productosComprados;
+	}
+
+	public Integer getIdCompra() {
+		return idCompra;
+	}
+
+	public void setIdCompra(Integer idCompra) {
+		this.idCompra = idCompra;
+	}
+
+	public LocalDate getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getTipoCompra() {
+		return tipoCompra;
+	}
+
+	public void setTipoCompra(String tipoCompra) {
+		this.tipoCompra = tipoCompra;
+	}
+
+	public String getNombreCompra() {
+		return nombreCompra;
+	}
+
+	public void setNombreCompra(String nombreCompra) {
+		this.nombreCompra = nombreCompra;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public BigDecimal getCostoTotal() {
+		return costoTotal;
+	}
+
+	public void setCostoTotal(BigDecimal costoTotal) {
+		this.costoTotal = costoTotal;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public Proveedor getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public List<DetalleCompra> getProductosComprados() {
+		return productosComprados;
+	}
+
+	public void setProductosComprados(List<DetalleCompra> productosComprados) {
+		this.productosComprados = productosComprados;
+	}
 
 	@PrePersist
 	@PreUpdate

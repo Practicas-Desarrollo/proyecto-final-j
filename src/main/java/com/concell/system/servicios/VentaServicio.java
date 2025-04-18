@@ -55,6 +55,10 @@ public class VentaServicio {
   }
 
   public VentaResponse crearVenta(VentaRequest request) {
+    if (!request.fecha().isEqual(LocalDate.now())) {
+      throw new RuntimeException("La fecha debe ser exactamente hoy");
+    }
+
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String email = authentication.getName();
 
@@ -76,6 +80,10 @@ public class VentaServicio {
       Producto producto = productoRepositorio.findById(pvRequest.idProducto())
               .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + pvRequest.idProducto()));
 
+      if (producto.getEstado() == Estado.INACTIVO) {
+        throw new RuntimeException("No se puede vender un producto INACTIVO: " + producto.getNombre());
+      }
+
       if (producto.getCantidad() < pvRequest.cantidad()) {
         throw new RuntimeException("Stock insuficiente para el producto: " + producto.getNombre());
       }
@@ -85,9 +93,9 @@ public class VentaServicio {
 
       productoServicio.verificarStockBajo(producto);
 
-      ProductoVendidoId id = new ProductoVendidoId(venta.getIdVenta(), producto.getIdProducto());
+      DetalleVentaId id = new DetalleVentaId(venta.getIdVenta(), producto.getIdProducto());
 
-      ProductoVendido productoVendido = new ProductoVendido();
+      DetalleVenta productoVendido = new DetalleVenta();
       productoVendido.setId(id);
       productoVendido.setVenta(venta);
       productoVendido.setProducto(producto);
@@ -99,15 +107,17 @@ public class VentaServicio {
 
     Venta savedVenta = ventaRepositorio.save(venta);
     return new VentaResponse(
-            venta.getIdVenta(),
-            venta.getFecha(),
-            venta.getDescripcionGarantia(),
-            venta.getTipoPago(),
-            venta.getTotal(),
-            venta.getEstado(),
-            venta.getUsuario().getIdUsuario(),
-            venta.getCliente().getIdCliente(),
-            venta.getProductosVendidos().stream()
+            savedVenta.getIdVenta(),
+            savedVenta.getFecha(),
+            savedVenta.getDescripcionGarantia(),
+            savedVenta.getTipoPago(),
+            savedVenta.getTotal(),
+            savedVenta.getEstado(),
+            savedVenta.getUsuario().getIdUsuario(),
+            savedVenta.getUsuario().getEmail(),
+            savedVenta.getCliente().getIdCliente(),
+            savedVenta.getCliente().getNombre(),
+            savedVenta.getProductosVendidos().stream()
                     .map(pv -> new ProductoVendidoResponse(
                             pv.getProducto().getIdProducto(),
                             pv.getProducto().getNombre(),
@@ -151,16 +161,16 @@ public class VentaServicio {
       producto.setCantidad(producto.getCantidad() - pvRequest.cantidad());
       productoRepositorio.save(producto);
 
-      ProductoVendidoId id = new ProductoVendidoId(venta.getIdVenta(), producto.getIdProducto());
+      DetalleVentaId id = new DetalleVentaId(venta.getIdVenta(), producto.getIdProducto());
 
-      ProductoVendido productoVendido = new ProductoVendido();
-      productoVendido.setId(id);
-      productoVendido.setVenta(venta);
-      productoVendido.setProducto(producto);
-      productoVendido.setCantidad(pvRequest.cantidad());
-      productoVendido.setPrecioUnitario(pvRequest.precioUnitario());
+      DetalleVenta detalleVenta = new DetalleVenta();
+      detalleVenta.setId(id);
+      detalleVenta.setVenta(venta);
+      detalleVenta.setProducto(producto);
+      detalleVenta.setCantidad(pvRequest.cantidad());
+      detalleVenta.setPrecioUnitario(pvRequest.precioUnitario());
 
-      venta.getProductosVendidos().add(productoVendido);
+      venta.getProductosVendidos().add(detalleVenta);
     }
 
     Venta ventaActualizada = ventaRepositorio.save(venta);
@@ -171,8 +181,10 @@ public class VentaServicio {
             ventaActualizada.getTipoPago(),
             ventaActualizada.getTotal(),
             ventaActualizada.getEstado(),
-            venta.getUsuario().getIdUsuario(),
-            venta.getCliente().getIdCliente(),
+            ventaActualizada.getUsuario().getIdUsuario(),
+            ventaActualizada.getUsuario().getEmail(),
+            ventaActualizada.getCliente().getIdCliente(),
+            ventaActualizada.getCliente().getNombre(),
             ventaActualizada.getProductosVendidos().stream()
                     .map(pv -> new ProductoVendidoResponse(
                             pv.getProducto().getIdProducto(),

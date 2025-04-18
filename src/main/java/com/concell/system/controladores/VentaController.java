@@ -45,7 +45,9 @@ public class VentaController {
                     venta.getTotal(),
                     venta.getEstado(),
                     venta.getUsuario().getIdUsuario(),
+                    venta.getUsuario().getEmail(),
                     venta.getCliente().getIdCliente(),
+                    venta.getCliente().getNombre(),
                     venta.getProductosVendidos().stream()
                             .map(pv -> new ProductoVendidoResponse(
                                     pv.getProducto().getIdProducto(),
@@ -72,7 +74,9 @@ public class VentaController {
             venta.getTotal(),
             venta.getEstado(),
             venta.getUsuario().getIdUsuario(),
+            venta.getUsuario().getEmail(),
             venta.getCliente().getIdCliente(),
+            venta.getCliente().getNombre(),
             venta.getProductosVendidos().stream()
                     .map(pv -> new ProductoVendidoResponse(
                             pv.getProducto().getIdProducto(),
@@ -99,7 +103,9 @@ public class VentaController {
                     venta.getTotal(),
                     venta.getEstado(),
                     venta.getUsuario().getIdUsuario(),
+                    venta.getUsuario().getEmail(),
                     venta.getCliente().getIdCliente(),
+                    venta.getCliente().getNombre(),
                     venta.getProductosVendidos().stream()
                             .map(pv -> new ProductoVendidoResponse(
                                     pv.getProducto().getIdProducto(),
@@ -132,7 +138,9 @@ public class VentaController {
                     venta.getTotal(),
                     venta.getEstado(),
                     venta.getUsuario().getIdUsuario(),
+                    venta.getUsuario().getDetalleUsuario().getNombre(),
                     venta.getCliente().getIdCliente(),
+                    venta.getCliente().getNombre(),
                     venta.getProductosVendidos().stream()
                             .map(pv -> new ProductoVendidoResponse(
                                     pv.getProducto().getIdProducto(),
@@ -150,7 +158,7 @@ public class VentaController {
   public ResponseEntity<byte[]> generarFactura(@PathVariable Integer idVenta) {
     try {
       Venta venta = ventaServicio.obtenerVentaPorId(idVenta);
-      byte[] pdfBytes = pdfGeneratorService.generateInvoice(venta);
+      byte[] pdfBytes = pdfGeneratorService.generarFactura(venta);
 
       return ResponseEntity.ok()
               .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura_" + idVenta + ".pdf")

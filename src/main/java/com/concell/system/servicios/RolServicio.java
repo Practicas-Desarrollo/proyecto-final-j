@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class RolServicio {
+
   private final RolRepositorio rolRepositorio;
 
   public RolServicio(RolRepositorio rolRepositorio) {
@@ -32,8 +33,8 @@ public class RolServicio {
     return rolRepositorio.findByEstado(Estado.ACTIVO);
   }
 
-  public Optional<Rol> buscarRolesPorNombre(String nombre) {
-    return rolRepositorio.findByNombre(nombre);
+  public List<Rol> buscarRolesPorNombre(String nombre) {
+    return rolRepositorio.findByNombreContainingIgnoreCase(nombre);
   }
 
   public RolResponse crearRol(RolRequest rolRequest) {

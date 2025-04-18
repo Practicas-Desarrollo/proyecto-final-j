@@ -14,7 +14,7 @@ public record CompraResponse(
         String descripcion,
         BigDecimal costo,
         Estado estado,
-        Integer idProveedor,
-        Integer idUsuario,
+        String nombreProveedor,
+        String nombreUsuario,
         List<ProductoCompradoResponse> productosComprados
 ) {}

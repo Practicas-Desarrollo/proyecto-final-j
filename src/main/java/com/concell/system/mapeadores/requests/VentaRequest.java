@@ -9,7 +9,6 @@ import java.util.List;
 
 public record VentaRequest(
         @NotNull(message = "La fecha no puede ser nula")
-        @PastOrPresent(message = "La fecha debe ser hoy o en el pasado")
         LocalDate fecha,
 
         @Size(max = 500, message = "La descripción de garantía no puede exceder los 500 caracteres")

@@ -18,24 +18,24 @@ public class AutenticacionServicio {
 
   private final UsuarioRepositorio usuarioRepositorio;
   private final RolRepositorio rolRepositorio;
-  private final JwtServicio jwtService;
+  private final JwtServicio jwtServicio;
   private final AuthenticationManager authenticationManager;
   private final PasswordEncoder passwordEncoder;
 
   public AutenticacionServicio(UsuarioRepositorio usuarioRepositorio,
                                 RolRepositorio rolRepositorio,
-                                JwtServicio jwtService,
+                                JwtServicio jwtServicio,
                                 PasswordEncoder passwordEncoder,
                                 AuthenticationManager authenticationManager
                                 ) {
     this.usuarioRepositorio = usuarioRepositorio;
     this.rolRepositorio = rolRepositorio;
-    this.jwtService = jwtService;
+    this.jwtServicio = jwtServicio;
     this.passwordEncoder = passwordEncoder;
     this.authenticationManager = authenticationManager;
   }
 
-  public RegistroResponse registerUser(RegistroRequest registroRequest) {
+  public RegistroResponse registrarUsuario(RegistroRequest registroRequest) {
     if (usuarioRepositorio.existsByEmail(registroRequest.email())) {
       throw new RuntimeException("El email ya está registrado");
     }
@@ -43,25 +43,22 @@ public class AutenticacionServicio {
     Rol rol = rolRepositorio.findById(registroRequest.idRol())
             .orElseThrow(() -> new RuntimeException("Rol no válido"));
 
-    Usuario newUser = Usuario
-            .builder()
-            .email(registroRequest.email())
-            .password(passwordEncoder.encode(registroRequest.password()))
-            .estado(registroRequest.estado())
-            .rol(rol)
-            .build();
+    Usuario newUser = new Usuario();
+    newUser.setEmail(registroRequest.email());
+    newUser.setPassword(passwordEncoder.encode(registroRequest.password()));
+    newUser.setEstado(registroRequest.estado());
+    newUser.setRol(rol);
 
     usuarioRepositorio.save(newUser);
-    String token = jwtService.crearToken(newUser);
+    String token = jwtServicio.crearToken(newUser);
 
-    return RegistroResponse
-            .builder()
-            .message("Usuario registrado exitosamente!")
-            .token(token)
-            .build();
+    RegistroResponse response = new RegistroResponse();
+    response.setMessage("Usuario registrado exitosamente!");
+    response.setToken(token);
+    return response;
   }
 
-  public RegistroResponse loginUser(LoginRequest loginRequest) {
+  public RegistroResponse loginUsuario(LoginRequest loginRequest) {
     authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                     loginRequest.email(),
@@ -75,12 +72,11 @@ public class AutenticacionServicio {
       throw new IllegalStateException("Usuario no activo");
     }
 
-    String token = jwtService.crearToken(usuario);
+    String token = jwtServicio.crearToken(usuario);
 
-    return RegistroResponse
-            .builder()
-            .message("Usuario logeado con exito!")
-            .token(token)
-            .build();
+    RegistroResponse response = new RegistroResponse();
+    response.setMessage("Usuario logeado con exito!");
+    response.setToken(token);
+    return response;
   }
 }

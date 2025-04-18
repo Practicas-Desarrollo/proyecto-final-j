@@ -26,15 +26,14 @@ public class ProveedorController {
             .stream()
             .map(proveedor -> new ProveedorResponse(
                     proveedor.getIdProveedor(),
+                    proveedor.getNit(),
                     proveedor.getNombre(),
                     proveedor.getApellidoPaterno(),
                     proveedor.getApellidoMaterno(),
                     proveedor.getContacto(),
                     proveedor.getTipoProducto(),
-                    proveedor.getNit(),
                     proveedor.getEstado())
-            )
-            .toList();
+            ).toList();
 
     return ResponseEntity
             .status(HttpStatus.OK)
@@ -49,6 +48,28 @@ public class ProveedorController {
     return ResponseEntity
             .status(HttpStatus.OK)
             .body(response);
+  }
+
+  @GetMapping("/buscar")
+  public ResponseEntity<List<ProveedorResponse>> buscarProveedoresPorNombre(
+          @RequestParam String nombre) {
+    List<ProveedorResponse> proveedores = proveedorServicio
+            .buscarProveedoresPorNombre(nombre)
+            .stream()
+            .map(proveedor -> new ProveedorResponse(
+                    proveedor.getIdProveedor(),
+                    proveedor.getNit(),
+                    proveedor.getNombre(),
+                    proveedor.getApellidoPaterno(),
+                    proveedor.getApellidoMaterno(),
+                    proveedor.getContacto(),
+                    proveedor.getTipoProducto(),
+                    proveedor.getEstado())
+            ).toList();
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(proveedores);
   }
 
   @PostMapping
