@@ -6,6 +6,7 @@ import com.concell.system.modelos.Producto;
 import com.concell.system.servicios.ProductoServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/productos")
+@PreAuthorize("hasAuthority('Administrador') or hasAuthority('Propietario de la tienda') or hasAuthority('Vendedor')")
 public class ProductoController {
 
   private final ProductoServicio productoServicio;

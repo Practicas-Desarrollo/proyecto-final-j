@@ -6,12 +6,14 @@ import com.concell.system.modelos.Rol;
 import com.concell.system.servicios.RolServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/roles")
+@PreAuthorize("hasAuthority('Administrador') or hasAuthority('Propietario de la tienda')")
 public class RolController {
 
   private final RolServicio rolServicio;

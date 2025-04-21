@@ -7,12 +7,14 @@ import com.concell.system.modelos.Categoria;
 import com.concell.system.servicios.CategoriaServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/categorias")
+@PreAuthorize("hasAuthority('Administrador') or hasAuthority('Propietario de la tienda') or hasAuthority('Vendedor')")
 public class CategoriaController {
 
   private final CategoriaServicio categoriaServicio;

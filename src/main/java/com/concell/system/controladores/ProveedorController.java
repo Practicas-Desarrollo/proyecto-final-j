@@ -5,12 +5,14 @@ import com.concell.system.mapeadores.responses.ProveedorResponse;
 import com.concell.system.servicios.ProveedorServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/proveedores")
+@PreAuthorize("hasAuthority('Administrador') or hasAuthority('Propietario de la tienda') or hasAuthority('Vendedor')")
 public class ProveedorController {
 
   private final ProveedorServicio proveedorServicio;

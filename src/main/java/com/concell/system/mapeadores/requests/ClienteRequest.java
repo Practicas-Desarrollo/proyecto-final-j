@@ -38,6 +38,6 @@ public record ClienteRequest(
 
         @NotBlank(message = "El email no puede estar vacío")
         @Email(message = "El email debe tener un formato válido")
-        @Size(max = 20, message = "El email no puede exceder los 20 caracteres")
+        @Size(max = 30, message = "El email no puede exceder los 30 caracteres")
         String email
 ) {}

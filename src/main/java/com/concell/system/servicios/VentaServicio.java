@@ -20,18 +20,15 @@ import java.util.stream.Collectors;
 @Service
 public class VentaServicio {
   private final VentaRepositorio ventaRepositorio;
-  private final ProductoServicio productoServicio;
   private final ProductoRepositorio productoRepositorio;
   private final UsuarioRepositorio usuarioRepositorio;
   private final ClienteRepositorio clienteRepositorio;
 
   public VentaServicio(VentaRepositorio ventaRepositorio,
-                       ProductoServicio productoServicio,
                        ProductoRepositorio productoRepositorio,
                        UsuarioRepositorio usuarioRepositorio,
                        ClienteRepositorio clienteRepositorio) {
     this.ventaRepositorio = ventaRepositorio;
-    this.productoServicio = productoServicio;
     this.productoRepositorio = productoRepositorio;
     this.usuarioRepositorio = usuarioRepositorio;
     this.clienteRepositorio = clienteRepositorio;
@@ -90,8 +87,6 @@ public class VentaServicio {
 
       producto.setCantidad(producto.getCantidad() - pvRequest.cantidad());
       productoRepositorio.save(producto);
-
-      productoServicio.verificarStockBajo(producto);
 
       DetalleVentaId id = new DetalleVentaId(venta.getIdVenta(), producto.getIdProducto());
 
@@ -196,7 +191,64 @@ public class VentaServicio {
     );
   }
 
+  public VentaResponse actualizarEstadoVenta(int idVenta) {
+    Venta venta = ventaRepositorio.findById(idVenta)
+            .orElseThrow(() -> new RuntimeException("Venta no encontrada con ID: " + idVenta));
+
+    Estado estadoActual = venta.getEstado();
+    Estado nuevoEstado = (estadoActual == Estado.ACTIVO) ? Estado.INACTIVO : Estado.ACTIVO;
+
+    if (estadoActual == Estado.ACTIVO && nuevoEstado == Estado.INACTIVO) {
+      revertirStock(venta);
+    } else if (estadoActual == Estado.INACTIVO && nuevoEstado == Estado.ACTIVO) {
+      actualizarStock(venta, false);
+    }
+
+    venta.setEstado(nuevoEstado);
+    Venta ventaActualizada = ventaRepositorio.save(venta);
+
+    return new VentaResponse(
+            ventaActualizada.getIdVenta(),
+            ventaActualizada.getFecha(),
+            ventaActualizada.getDescripcionGarantia(),
+            ventaActualizada.getTipoPago(),
+            ventaActualizada.getTotal(),
+            ventaActualizada.getEstado(),
+            ventaActualizada.getUsuario().getIdUsuario(),
+            ventaActualizada.getUsuario().getEmail(),
+            ventaActualizada.getCliente().getIdCliente(),
+            ventaActualizada.getCliente().getNombre(),
+            ventaActualizada.getProductosVendidos().stream()
+                    .map(pv -> new ProductoVendidoResponse(
+                            pv.getProducto().getIdProducto(),
+                            pv.getProducto().getNombre(),
+                            pv.getCantidad(),
+                            pv.getPrecioUnitario()
+                    )).collect(Collectors.toList())
+    );
+  }
+
   public void eliminarCompra(Integer idVenta) {
     ventaRepositorio.deleteById(idVenta);
+  }
+
+  private void revertirStock(Venta venta) {
+    for (DetalleVenta detalle : venta.getProductosVendidos()) {
+      Producto producto = detalle.getProducto();
+      producto.setCantidad(producto.getCantidad() + detalle.getCantidad());
+      productoRepositorio.save(producto);
+    }
+  }
+
+  private void actualizarStock(Venta venta, boolean sumar) {
+    for (DetalleVenta detalle : venta.getProductosVendidos()) {
+      Producto producto = detalle.getProducto();
+      int cantidad = sumar ? detalle.getCantidad() : -detalle.getCantidad();
+      if (producto.getCantidad() + cantidad < 0) {
+        throw new RuntimeException("No hay suficiente stock para reactivar la venta");
+      }
+      producto.setCantidad(producto.getCantidad() + cantidad);
+      productoRepositorio.save(producto);
+    }
   }
 }

@@ -19,10 +19,7 @@ public record RegistroRequest(
         )
         String password,
 
-        @NotNull(message = "El estado no puede ser nulo")
         Estado estado,
 
-        @NotNull(message = "El rol no puede ser nulo")
-        @Positive(message = "El ID del rol debe ser positivo")
         Integer idRol
 ) {}

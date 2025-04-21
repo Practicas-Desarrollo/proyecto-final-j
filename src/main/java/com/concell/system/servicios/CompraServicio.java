@@ -153,18 +153,47 @@ public class CompraServicio {
       compra.getProductosComprados().add(detalleCompra);
     }
 
-    Compra updatedCompra = compraRepositorio.save(compra);
+    Compra compraActualizada = compraRepositorio.save(compra);
     return new CompraResponse(
-            updatedCompra.getIdCompra(),
-            updatedCompra.getFecha(),
-            updatedCompra.getTipoCompra(),
-            updatedCompra.getNombreCompra(),
-            updatedCompra.getDescripcion(),
-            updatedCompra.getCostoTotal(),
-            updatedCompra.getEstado(),
-            updatedCompra.getProveedor().getNombre(),
-            updatedCompra.getUsuario().getEmail(),
-            updatedCompra.getProductosComprados()
+            compraActualizada.getIdCompra(),
+            compraActualizada.getFecha(),
+            compraActualizada.getTipoCompra(),
+            compraActualizada.getNombreCompra(),
+            compraActualizada.getDescripcion(),
+            compraActualizada.getCostoTotal(),
+            compraActualizada.getEstado(),
+            compraActualizada.getProveedor().getNombre(),
+            compraActualizada.getUsuario().getEmail(),
+            compraActualizada.getProductosComprados()
+                    .stream()
+                    .map(pc -> new ProductoCompradoResponse(
+                            pc.getProducto().getIdProducto(),
+                            pc.getProducto().getNombre(),
+                            pc.getCantidad(),
+                            pc.getPrecioUnitario()
+                    ))
+                    .collect(Collectors.toList()));
+  }
+
+  public CompraResponse actualizarEstadoCompra(int idCompra) {
+    Compra compra = compraRepositorio.findById(idCompra)
+            .orElseThrow(() -> new RuntimeException("Compra no encontrada"));
+
+    Estado nuevoEstado = (compra.getEstado() == Estado.ACTIVO) ? Estado.INACTIVO : Estado.ACTIVO;
+    compra.setEstado(nuevoEstado);
+
+    Compra compraActualizada = compraRepositorio.save(compra);
+    return new CompraResponse(
+            compraActualizada.getIdCompra(),
+            compraActualizada.getFecha(),
+            compraActualizada.getTipoCompra(),
+            compraActualizada.getNombreCompra(),
+            compraActualizada.getDescripcion(),
+            compraActualizada.getCostoTotal(),
+            compraActualizada.getEstado(),
+            compraActualizada.getProveedor().getNombre(),
+            compraActualizada.getUsuario().getEmail(),
+            compraActualizada.getProductosComprados()
                     .stream()
                     .map(pc -> new ProductoCompradoResponse(
                             pc.getProducto().getIdProducto(),

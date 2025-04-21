@@ -144,7 +144,7 @@ public class CategoriaServicio {
     );
   }
 
-  public void eliminarCategoria(Integer idCategoria) {
+  public void eliminarCategoria(int idCategoria) {
     if (!categoriaRepositorio.existsById(idCategoria)) {
       throw new RuntimeException("Categoria no encontrado");
     }

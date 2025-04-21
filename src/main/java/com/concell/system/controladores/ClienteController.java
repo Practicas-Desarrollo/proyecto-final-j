@@ -5,12 +5,14 @@ import com.concell.system.mapeadores.responses.ClienteResponse;
 import com.concell.system.modelos.Cliente;
 import com.concell.system.servicios.ClienteServicio;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
+@PreAuthorize("hasAuthority('Administrador') or hasAuthority('Propietario de la tienda') or hasAuthority('Vendedor')")
 public class ClienteController {
 
   private final ClienteServicio clienteServicio;

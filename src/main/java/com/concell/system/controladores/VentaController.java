@@ -1,6 +1,7 @@
 package com.concell.system.controladores;
 
 import com.concell.system.mapeadores.requests.VentaRequest;
+import com.concell.system.mapeadores.responses.CategoriaResponse;
 import com.concell.system.mapeadores.responses.ProductoVendidoResponse;
 import com.concell.system.mapeadores.responses.VentaResponse;
 import com.concell.system.modelos.Venta;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/ventas")
+@PreAuthorize("hasAuthority('Administrador') or hasAuthority('Propietario de la tienda') or hasAuthority('Vendedor')")
 public class VentaController {
 
   private final VentaServicio ventaServicio;
@@ -183,6 +186,17 @@ public class VentaController {
 
     VentaResponse response = ventaServicio.actualizarVenta(idVenta, request);
     return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("/{idVenta}/estado")
+  public ResponseEntity<VentaResponse> actualizarEstadoVenta(
+          @PathVariable("idVenta") int idVenta) {
+    VentaResponse ventaResponse =
+            ventaServicio.actualizarEstadoVenta(idVenta);
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(ventaResponse);
   }
 
   @DeleteMapping("/{idVenta}")

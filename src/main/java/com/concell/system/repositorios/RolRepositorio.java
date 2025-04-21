@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface RolRepositorio extends JpaRepository<Rol, Integer> {
 
+  Rol findByNombre(String nombre);
+
   List<Rol> findByNombreContainingIgnoreCase(String nombre);
 
   boolean existsByNombre(String nombre);

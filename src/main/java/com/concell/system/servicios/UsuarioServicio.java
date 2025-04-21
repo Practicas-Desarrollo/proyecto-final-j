@@ -51,7 +51,6 @@ public class UsuarioServicio {
                                     usuario.getDetalleUsuario().getApellidoPaterno(),
                                     usuario.getDetalleUsuario().getApellidoMaterno(),
                                     usuario.getDetalleUsuario().getFechaNacimiento()
-//                            usuario.getDetalleUsuario().getFechaCreacion()
                             ) : null
             ));
   }
@@ -91,7 +90,6 @@ public class UsuarioServicio {
                             usuarioActualizado.getDetalleUsuario().getApellidoPaterno(),
                             usuarioActualizado.getDetalleUsuario().getApellidoMaterno(),
                             usuarioActualizado.getDetalleUsuario().getFechaNacimiento()
-//                            usuarioActualizado.getDetalleUsuario().getFechaCreacion()
                     ) : null
     );
   }
@@ -118,7 +116,6 @@ public class UsuarioServicio {
                             usuarioActualizado.getDetalleUsuario().getApellidoPaterno(),
                             usuarioActualizado.getDetalleUsuario().getApellidoMaterno(),
                             usuarioActualizado.getDetalleUsuario().getFechaNacimiento()
-//                            usuarioActualizado.getDetalleUsuario().getFechaCreacion()
                     ) : null
     );
   }
@@ -144,7 +141,6 @@ public class UsuarioServicio {
                             usuario.getDetalleUsuario().getApellidoPaterno(),
                             usuario.getDetalleUsuario().getApellidoMaterno(),
                             usuario.getDetalleUsuario().getFechaNacimiento()
-//                            usuario.getDetalleUsuario().getFechaCreacion()
                     ) : null
     );
   }

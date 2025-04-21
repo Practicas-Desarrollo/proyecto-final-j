@@ -8,6 +8,7 @@ import com.concell.system.servicios.CompraServicio;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/compras")
+@PreAuthorize("hasAuthority('Administrador') or hasAuthority('Propietario de la tienda') or hasAuthority('Vendedor')")
 public class CompraController {
   private final CompraServicio compraServicio;
 
@@ -145,6 +147,17 @@ public class CompraController {
     CompraResponse response = compraServicio.actualizarCompra(idCompra, request);
 
     return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("/{idCompra}/estado")
+  public ResponseEntity<CompraResponse> actualizarEstadoCompra(
+          @PathVariable("idCompra") int idCompra) {
+    CompraResponse compraResponse =
+            compraServicio.actualizarEstadoCompra(idCompra);
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(compraResponse);
   }
 
   @DeleteMapping("/{idCompra}")

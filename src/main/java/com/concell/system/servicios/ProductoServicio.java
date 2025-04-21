@@ -16,7 +16,7 @@ public class ProductoServicio {
 
   private final ProductoRepositorio productoRepositorio;
   private final CategoriaServicio categoriaServicio;
-  private static final int STOCK_BAJO = 10;
+  private static final int STOCK_BAJO = 5;
 
   public ProductoServicio(ProductoRepositorio productoRepositorio,
                           CategoriaServicio categoriaServicio) {
@@ -128,11 +128,5 @@ public class ProductoServicio {
     }
 
     productoRepositorio.deleteById(idProducto);
-  }
-
-  public void verificarStockBajo(Producto producto) {
-    if (producto.getCantidad() < STOCK_BAJO) {
-      throw new RuntimeException("Stock bajo para el producto: " + producto.getNombre());
-    }
   }
 }

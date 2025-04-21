@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtServicio {
@@ -28,8 +30,9 @@ public class JwtServicio {
 
   public String crearToken(Usuario usuario) {
     Map<String, Object> extraClaims = new HashMap<>();
-//    extraClaims.put("rol", usuario.getRol().getNombre());
-//    extraClaims.put("permisos", usuario.getRol().getPermisos());
+    extraClaims.put("roles", usuario.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList()));
 
     return generarToken(extraClaims, usuario);
   }
@@ -38,10 +41,21 @@ public class JwtServicio {
     return obtenerClaim(token, Claims::getSubject);
   }
 
+  public List<String> obtenerRolesFromToken(String token) {
+    Claims claims = obtenerClaims(token);
+    return claims.get("roles", List.class);
+  }
+
   public boolean esTokenValido(String token, UserDetails userDetails) {
     String email = getEmailFromToken(token);
+    List<String> tokenRoles = obtenerRolesFromToken(token);
+    List<String> userRoles = userDetails.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
 
-    return (email.equals(userDetails.getUsername()) && !esTokenExpirado(token) );
+    return email.equals(userDetails.getUsername())
+            && !esTokenExpirado(token)
+            && tokenRoles.containsAll(userRoles);
   }
 
   private String generarToken(Map<String, Object> extraClaims, UserDetails userDetails) {
